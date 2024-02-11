@@ -1,4 +1,7 @@
-const PDFDocument = require('pdfkit');
+// const { heightOfString } = require('pdfkit');
+const PDFDocument = require('pdfkit-table');
+
+// const table = require('pdfkit-table');
 
 // const {addSample} = require('./functionstest');
 
@@ -40,6 +43,75 @@ function addSample(document){
     });
 }
 
+function signing(document){
+
+    let width = document.page.width - 115 - document.fontSize(8).widthOfString("Signature du client")
+    console.log(width)
+    document
+    .moveDown(3)
+    // .moveTo(51,500)
+    .fontSize(8)
+    .font("./Fonts/TT Chocolates Trial Regular.otf")
+    .fillColor("#000")
+    .text(`Signature du client`, width, document.y)
+
+    document
+    .moveDown(0.5)
+    .rect(document.page.width - 250, document.y + 0, 200, 50)
+    document.fill("#EFEFEF",0.5)
+}
+
+function addBottom(document){
+        
+    let height1 = document.fontSize(8).heightOfString(`Bonjour`)
+    let height2 = document.fontSize(8).heightOfString(`Bonjour \nBonjour \nBonjour \nBonjour`)
+    
+    document
+    .moveTo(51, document.page.height - 50 - height1 -  height2)
+    .lineTo(560, document.page.height - 50 - height1 -  height2)
+    .lineWidth(1)
+    .fillAndStroke("#ADADAD", "#ADADAD")
+
+    // console.log("moveTo")
+    document
+    .moveDown(1)
+    // .moveTo(51,500)
+    .fontSize(8)
+    .font("./Fonts/TT Chocolates Trial Bold.otf")
+    .fillColor("#000000")
+    .text(`                              Siège social\nCoordonnées`, 51, document.page.height - 30 - height1 -  height2, {
+        columns: 2,
+        columnGap: 10,
+        height: height1,
+        width: 600,
+        align: "left",
+        // continued: true,
+        // width: 150
+    })
+    
+    document
+    // .moveDown(1)
+    // .fontSize(8)
+    .font("./Fonts/TT Chocolates Trial Regular.otf")
+    .fillColor("#000000")
+    .text(`                              Numéro SIREN: Z5ETR7FRGHD8UEH\n                              22 Rue du Bourget \n                              19000 Nouvelle\n                              France\nTéléphone: 0678754335\nEmail: ryr@fhdhd.com\nSite Web: www.djdjhdhss.fr`, 51, document.page.height - 30 - height2, {
+        columns: 2,
+        columnGap: 10,
+        height: height2,
+        width: 600,
+        align: "left",
+        // continued: true,
+        // width: 150
+    })
+    
+    document
+    .moveTo(0,document.page.height - 10)
+    .lineTo(document.page.width, document.page.height - 10)
+    .lineWidth(20)
+    .fillAndStroke("#11EBCD", "#11EBCD")
+}
+
+
 function createQuotation(document, number){
 
     // doc.fontSize(25).text('Here is some vector graphics...', 100, 80);
@@ -60,29 +132,163 @@ function createQuotation(document, number){
     .lineWidth(4)
     .fillAndStroke("#11EBCD", "#11EBCD")
 
-    let height = document.fontSize(10).heightOfString(`Bonjour \n Bonsoir \n Bonne après-midi \n Bonne nuit`, {
+    let height1 = document.fontSize(10).heightOfString(`ENTREPRISE`, {
+        width: 250,
+        align: "left"})
+
+    let height2 = document.heightOfString(`Bonjour \nBonjour \nBonjour \nBonjour`, {
         width: 250,
         align: "left"})
     
-    console.log(height)
+    // console.log(height)
+
 
     document
     .moveDown(4)
     .fontSize(10)
-    .fillColor("#000000",0.65)
-    .text(`Baptiste Gauthier \n17 Avenue \n60356 Austanville\n06 84 73 94 85 \n Baptiste Gauthier \n17 Avenue \n60356 Austanville\n06 84 73 94 85`, {
+    .fillColor("#000000")
+    .text(`ENTREPRISE \nDESTINATAIRE`, {
         columns: 2,
         columnGap: 10,
-        height: height,
+        height: height1,
         width: 750,
         align: "left",
         // continued: true,
         // width: 150
     })
+
+    document
+    // .moveDown(4)
+    .font("./Fonts/TT Chocolates Trial Regular.otf")
+    .fontSize(10)
+    .fillColor("#000000",0.65)
+    .text(`Baptiste Gauthier \n17 Avenue \n60356 Austanville\n06 84 73 94 85 \nBaptiste Gauthier \n17 Avenue \n60356 Austanville\n06 84 73 94 85`, {
+        columns: 2,
+        columnGap: 10,
+        height: height2,
+        width: 750,
+        align: "left",
+        // continued: true,
+        // width: 150
+    })
+
+    document
+    // .moveDown(4)
+    .rect(50, 250, 330, 105)
+    document.fill("#EFEFEF")
+
+    const heightLevel3 = document.heightOfString(`Bonjour \nBonjour \nBonjour \nBonjour \nBonjour`)
+
+    // console.log(`Bonjour\nBonjour\n\tBonjour`)
+
+    document
+    .moveDown(5)
+    .fillColor("#000000",0.65)
+    .text(`            Date du devis:\n            Référence du devis:\n            Durée de validité du devis\n            Emis par:\n            Date de début de prestation:\n${"Date du devis"}:\n${"Référence du devis"}:\n${"Durée de validité du devis:"}\n${"Emis par:"}\n${"Date de début de prestation:"}`, {
+        // .text(`\n\n\n\n\nDate du devis:\nRéférence du devis:\nDurée de validité du devis\nEmis par:\nDate de début de prestation:\n${"Date du devis"}:\n${"Référence"}:\n${"Durée de validité du devis"}\n${"Emis par"}:\n${"Date de début de prestation:"}`, {
+        columns: 2,
+        columnGap: 25,
+        height: heightLevel3,
+        width: 330,
+        align: "left",
+        // continued: true,
+        // width: 150
+    }).lineWidth(50)
+    
+    document
+    .moveTo(51,400)
+    .lineTo(560, 400)
+    .lineWidth(2)
+    .fillAndStroke("#11EBCD", "#11EBCD")
+
+    let table = {
+        headers: [ "Prestation", "Quantité", "Prix unitaire", "TVA (%)", "Total HT", "Total TTC" ],
+        rows: [
+          [ "Switzerland", "12%", "+1.12%", "Switzerland", "12%", "+1.12%" ],
+          [ "France", "67%", "-0.98%","France", "67%", "-0.98%" ],
+          [ "England", "33%", "+4.44%","England", "33%", "+4.44%" ],
+          [ "England", "33%", "+4.44%","England", "33%", "+4.44%" ],
+          [ "England", "33%", "+4.44%","England", "33%", "+4.44%" ],
+          [ "England", "33%", "+4.44%","England", "33%", "+4.44%" ],
+          [ "England", "33%", "+4.44%","England", "33%", "+4.44%" ],
+          [ "England", "33%", "+4.44%","England", "33%", "+4.44%" ],
+          [ "England", "33%", "+4.44%","England", "33%", "+4.44%" ],
+          [ "England", "33%", "+4.44%","England", "33%", "+4.44%" ],
+          [ "England", "33%", "+4.44%","England", "33%", "+4.44%" ],
+          [ "England", "33%", "+4.44%","England", "33%", "+4.44%" ],
+        ],
+
+      }
+
+    document
+    .moveDown(10)
+    .table(table, {
+                    width: 510, 
+                    fontFamily: "./Fonts/TT Chocolates Trial Regular.otf",
+                    divider: {
+                        header: { disabled: true, width: 1, opacity: 1 },
+                        horizontal: { disabled: false, width: 0.5, opacity: 0.5 },
+                    },
+                    padding: 3,
+                    columnSpacing: 15,})
+    
+    document
+    .font("./Fonts/TT Chocolates Trial Bold.otf")
+
+    console.log(document.x,document.y,document.page.width,document.page.height)
+
+    let heightLevel4 = document.fontSize(13).heightOfString(`Bonjour `)
+    
+    document
+    .moveDown(1)
+    // .moveTo(51,500)
+    .fontSize(13)
+    .font("./Fonts/TT Chocolates Trial Bold.otf")
+    .fillColor("#000000")
+    .text(`Total HT\n${"1000£"}`, document.page.width - 200, document.y, {
+        columns: 2,
+        columnGap: 10,
+        height: heightLevel4,
+        width: 200,
+        align: "left",
+        // continued: true,
+        // width: 150
+    }) 
+    
+    document
+    .moveDown(0.5)
+    // .moveTo(51,500)
+    .fontSize(13)
+    .font("./Fonts/TT Chocolates Trial Bold.otf")
+    .fillColor("#11EBCD")
+    .text(`Total TTC\n${"1000£"}`, document.page.width - 200, document.y, {
+        columns: 2,
+        columnGap: 10,
+        height: heightLevel4,
+        width: 200,
+        align: "left",
+        // continued: true,
+        // width: 150
+    })
+
+    
+
+    // console.log(document.page)
+
+    if(true){
+        signing(document)
+    }
+
+    addBottom(document)
+    // document.addPage()
+    // addBottomLine()
+
+    // .fontSize(10)
+    // .fillColor("#000000",0.65)
     
     // document.list(["lorem ipsum lorem ipsum lorem ipsum", "lorem ipsumum"], 100, 200, "bulletRadius")
 
-    document.fill("#FFFF00")
+    // document.fill("#FFFF00")
 
     // // some vector graphics
     // document
