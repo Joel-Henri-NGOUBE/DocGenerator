@@ -45,8 +45,8 @@ function addSample(document){
 
 function signing(document){
 
-    let width = document.page.width - 115 - document.fontSize(8).widthOfString("Signature du client")
-    console.log(width)
+    const width = document.page.width - 115 - document.fontSize(8).widthOfString("Signature du client")
+
     document
     .moveDown(3)
     // .moveTo(51,500)
@@ -61,14 +61,14 @@ function signing(document){
     document.fill("#EFEFEF",0.5)
 }
 
-function addBottom(document){
+function addBottom(document,company){
         
-    let height1 = document.fontSize(8).heightOfString(`Bonjour`)
-    let height2 = document.fontSize(8).heightOfString(`Bonjour \nBonjour \nBonjour \nBonjour`)
+    const stringHeight1 = document.fontSize(8).heightOfString(`Bonjour`)
+    const stringHeight2 = document.fontSize(8).heightOfString(`Bonjour \nBonjour \nBonjour \nBonjour`)
     
     document
-    .moveTo(51, document.page.height - 50 - height1 -  height2)
-    .lineTo(560, document.page.height - 50 - height1 -  height2)
+    .moveTo(51, document.page.height - 50 - stringHeight1 -  stringHeight2)
+    .lineTo(560, document.page.height - 50 - stringHeight1 -  stringHeight2)
     .lineWidth(1)
     .fillAndStroke("#ADADAD", "#ADADAD")
 
@@ -79,14 +79,12 @@ function addBottom(document){
     .fontSize(8)
     .font("./Fonts/TT Chocolates Trial Bold.otf")
     .fillColor("#000000")
-    .text(`                              Siège social\nCoordonnées`, 51, document.page.height - 30 - height1 -  height2, {
+    .text(`                              Siège social\nCoordonnées`, 51, document.page.height - 30 - stringHeight1 -  stringHeight2, {
         columns: 2,
         columnGap: 10,
-        height: height1,
+        height: stringHeight1,
         width: 600,
         align: "left",
-        // continued: true,
-        // width: 150
     })
     
     document
@@ -94,14 +92,12 @@ function addBottom(document){
     // .fontSize(8)
     .font("./Fonts/TT Chocolates Trial Regular.otf")
     .fillColor("#000000")
-    .text(`                              Numéro SIREN: Z5ETR7FRGHD8UEH\n                              22 Rue du Bourget \n                              19000 Nouvelle\n                              France\nTéléphone: 0678754335\nEmail: ryr@fhdhd.com\nSite Web: www.djdjhdhss.fr`, 51, document.page.height - 30 - height2, {
+    .text(`                              Numéro SIREN: ${company.siren}\n                              ${company.street} \n                              ${company.zipcode} ${company.city}\n                              ${company.country}\nTéléphone: ${company.phone}\nEmail: ${company.mail}\nSite Web: ${company.site}`, 51, document.page.height - 30 - height2, {
         columns: 2,
         columnGap: 10,
-        height: height2,
+        height: stringHeight2,
         width: 600,
         align: "left",
-        // continued: true,
-        // width: 150
     })
     
     document
@@ -111,8 +107,86 @@ function addBottom(document){
     .fillAndStroke("#11EBCD", "#11EBCD")
 }
 
+function addBoard(document, modalities){
+    
+    document
+    .moveTo(51,400)
+    .lineTo(560, 400)
+    .lineWidth(2)
+    .fillAndStroke("#11EBCD", "#11EBCD")
 
-function createQuotation(document, number){
+    const rows = modalities.map((element) => {
+        let priceHT = element.quantity * element.unitPrice
+        let priceTTC = priceHT * (1 + element.tva)
+        return [`${element.performaneTitle}\n${element.performaneDescription}`, element.quantity, element.unitPrice, element.tva, priceHT, priceTTC]
+    })
+
+    let totalHT = 0 
+    let totalTTC = 0 
+    for(prestation of rows){
+        totalHT += prestation[4]
+    }
+    for(prestation of rows){
+        totalTTC += prestation[5]
+    }
+
+    const table = {
+        headers: [ "Prestation", "Quantité", "Prix unitaire", "TVA (%)", "Total HT", "Total TTC" ],
+        rows: rows,
+    }
+
+    document
+    .moveDown(10)
+    .table(table, {
+        width: 510, 
+        fontFamily: "./Fonts/TT Chocolates Trial Regular.otf",
+        divider: {
+            header: { disabled: true, width: 1, opacity: 1 },
+            horizontal: { disabled: false, width: 0.5, opacity: 0.5 },
+        },
+        padding: 3,
+        columnSpacing: 15
+    })
+    
+    document
+    .font("./Fonts/TT Chocolates Trial Bold.otf")
+
+    console.log(document.x,document.y,document.page.width,document.page.height)
+
+    const stringHeight = document.fontSize(13).heightOfString(`Bonjour `)
+    
+    document
+    .moveDown(1)
+    // .moveTo(51,500)
+    .fontSize(13)
+    .font("./Fonts/TT Chocolates Trial Bold.otf")
+    .fillColor("#000000")
+    .text(`Total HT\n${totalHT} €`, document.page.width - 200, document.y, {
+        columns: 2,
+        columnGap: 10,
+        height: stringHeight,
+        width: 200,
+        align: "left",
+    }) 
+    
+    document
+    .moveDown(0.5)
+    // .moveTo(51,500)
+    .fontSize(13)
+    .font("./Fonts/TT Chocolates Trial Bold.otf")
+    .fillColor("#11EBCD")
+    .text(`Total TTC\n${totalTTC} €`, document.page.width - 200, document.y, {
+        columns: 2,
+        columnGap: 10,
+        height: heightLevel4,
+        width: 200,
+        align: "left",
+    })
+
+}
+
+
+function createQuotation(document, company, client, modalities, quotation, wantsToSign, number){
 
     // doc.fontSize(25).text('Here is some vector graphics...', 100, 80);
     // document.
@@ -132,11 +206,11 @@ function createQuotation(document, number){
     .lineWidth(4)
     .fillAndStroke("#11EBCD", "#11EBCD")
 
-    let height1 = document.fontSize(10).heightOfString(`ENTREPRISE`, {
+    const stringHeight1 = document.fontSize(10).heightOfString(`ENTREPRISE`, {
         width: 250,
         align: "left"})
 
-    let height2 = document.heightOfString(`Bonjour \nBonjour \nBonjour \nBonjour`, {
+    const stringHeight2 = document.heightOfString(`Bonjour \nBonjour \nBonjour \nBonjour`, {
         width: 250,
         align: "left"})
     
@@ -150,11 +224,9 @@ function createQuotation(document, number){
     .text(`ENTREPRISE \nDESTINATAIRE`, {
         columns: 2,
         columnGap: 10,
-        height: height1,
+        height: stringHeight1,
         width: 750,
         align: "left",
-        // continued: true,
-        // width: 150
     })
 
     document
@@ -162,14 +234,12 @@ function createQuotation(document, number){
     .font("./Fonts/TT Chocolates Trial Regular.otf")
     .fontSize(10)
     .fillColor("#000000",0.65)
-    .text(`Baptiste Gauthier \n17 Avenue \n60356 Austanville\n06 84 73 94 85 \nBaptiste Gauthier \n17 Avenue \n60356 Austanville\n06 84 73 94 85`, {
+    .text(`${company.name} \n${company.street} \n${company.zipcode} ${company.city}\n${company.phone} \n${client.name} \n${client.street} \n${client.zipcode} ${client.city}\n${client.phone}`, {
         columns: 2,
         columnGap: 10,
-        height: height2,
+        height: stringHeight2,
         width: 750,
         align: "left",
-        // continued: true,
-        // width: 150
     })
 
     document
@@ -177,105 +247,25 @@ function createQuotation(document, number){
     .rect(50, 250, 330, 105)
     document.fill("#EFEFEF")
 
-    const heightLevel3 = document.heightOfString(`Bonjour \nBonjour \nBonjour \nBonjour \nBonjour`)
+    const stringHeight3 = document.heightOfString(`Bonjour \nBonjour \nBonjour \nBonjour \nBonjour`)
 
     // console.log(`Bonjour\nBonjour\n\tBonjour`)
 
     document
     .moveDown(5)
     .fillColor("#000000",0.65)
-    .text(`            Date du devis:\n            Référence du devis:\n            Durée de validité du devis\n            Emis par:\n            Date de début de prestation:\n${"Date du devis"}:\n${"Référence du devis"}:\n${"Durée de validité du devis:"}\n${"Emis par:"}\n${"Date de début de prestation:"}`, {
+    .text(`            Date du devis:\n            Référence du devis:\n            Durée de validité du devis\n            Emis par:\n            Date de début de prestation:\n${quotation.date}:\n${quotation.reference}:\n${quotation.validity}\n${quotation.sender}\n${quotation.performanceDate}`, {
         // .text(`\n\n\n\n\nDate du devis:\nRéférence du devis:\nDurée de validité du devis\nEmis par:\nDate de début de prestation:\n${"Date du devis"}:\n${"Référence"}:\n${"Durée de validité du devis"}\n${"Emis par"}:\n${"Date de début de prestation:"}`, {
         columns: 2,
         columnGap: 25,
-        height: heightLevel3,
+        height: stringHeight3,
         width: 330,
         align: "left",
-        // continued: true,
-        // width: 150
     }).lineWidth(50)
     
-    document
-    .moveTo(51,400)
-    .lineTo(560, 400)
-    .lineWidth(2)
-    .fillAndStroke("#11EBCD", "#11EBCD")
+    addBoard(document,modalities)
 
-    let table = {
-        headers: [ "Prestation", "Quantité", "Prix unitaire", "TVA (%)", "Total HT", "Total TTC" ],
-        rows: [
-          [ "Switzerland", "12%", "+1.12%", "Switzerland", "12%", "+1.12%" ],
-          [ "France", "67%", "-0.98%","France", "67%", "-0.98%" ],
-          [ "England", "33%", "+4.44%","England", "33%", "+4.44%" ],
-          [ "England", "33%", "+4.44%","England", "33%", "+4.44%" ],
-          [ "England", "33%", "+4.44%","England", "33%", "+4.44%" ],
-          [ "England", "33%", "+4.44%","England", "33%", "+4.44%" ],
-          [ "England", "33%", "+4.44%","England", "33%", "+4.44%" ],
-          [ "England", "33%", "+4.44%","England", "33%", "+4.44%" ],
-          [ "England", "33%", "+4.44%","England", "33%", "+4.44%" ],
-          [ "England", "33%", "+4.44%","England", "33%", "+4.44%" ],
-          [ "England", "33%", "+4.44%","England", "33%", "+4.44%" ],
-          [ "England", "33%", "+4.44%","England", "33%", "+4.44%" ],
-        ],
-
-      }
-
-    document
-    .moveDown(10)
-    .table(table, {
-                    width: 510, 
-                    fontFamily: "./Fonts/TT Chocolates Trial Regular.otf",
-                    divider: {
-                        header: { disabled: true, width: 1, opacity: 1 },
-                        horizontal: { disabled: false, width: 0.5, opacity: 0.5 },
-                    },
-                    padding: 3,
-                    columnSpacing: 15,})
-    
-    document
-    .font("./Fonts/TT Chocolates Trial Bold.otf")
-
-    console.log(document.x,document.y,document.page.width,document.page.height)
-
-    let heightLevel4 = document.fontSize(13).heightOfString(`Bonjour `)
-    
-    document
-    .moveDown(1)
-    // .moveTo(51,500)
-    .fontSize(13)
-    .font("./Fonts/TT Chocolates Trial Bold.otf")
-    .fillColor("#000000")
-    .text(`Total HT\n${"1000£"}`, document.page.width - 200, document.y, {
-        columns: 2,
-        columnGap: 10,
-        height: heightLevel4,
-        width: 200,
-        align: "left",
-        // continued: true,
-        // width: 150
-    }) 
-    
-    document
-    .moveDown(0.5)
-    // .moveTo(51,500)
-    .fontSize(13)
-    .font("./Fonts/TT Chocolates Trial Bold.otf")
-    .fillColor("#11EBCD")
-    .text(`Total TTC\n${"1000£"}`, document.page.width - 200, document.y, {
-        columns: 2,
-        columnGap: 10,
-        height: heightLevel4,
-        width: 200,
-        align: "left",
-        // continued: true,
-        // width: 150
-    })
-
-    
-
-    // console.log(document.page)
-
-    if(true){
+    if(wantsToSign){
         signing(document)
     }
 
@@ -326,7 +316,7 @@ function createQuotation(document, number){
 
 // #14B3C5
 
-function createPDF(visualize, response, onData, onEnd, whichFunction, addHeaders){
+function createPDF(visualize, response, onData, onEnd, whichFunction, addHeaders, data){
     const doc = new PDFDocument({ 
         bufferPages: true,
         font: 'Courier-Bold',
@@ -350,7 +340,7 @@ function createPDF(visualize, response, onData, onEnd, whichFunction, addHeaders
     }
 
     if(whichFunction === "createQuotation"){
-        createQuotation(doc,20)
+        createQuotation(doc, data[0], data[1], data[2], data[3], data[4], data[5])
     }
 
     if(!visualize){
