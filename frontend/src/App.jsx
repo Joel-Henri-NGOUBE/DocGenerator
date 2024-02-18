@@ -12,11 +12,38 @@ function App() {
     description: "",
     quantity: "",
     unitPrice: "",
-    tva: "",
+    tva: ""
+  }
+
+  const inputsData = {
+    company: {
+      name: "",
+      siren: "",
+      street: "",
+      zipcode: "",
+      city: "",
+      country: "",
+      phone: "",
+      mail: "",
+      site: ""
+    },
+    client: {
+      name: "",
+      street: "",
+      zipcode: "",
+      city: "",
+      phone: ""
+    },
+    quotation: {
+      validity: "",
+      sender: "",
+      performanceDate: ""
+    },
+    wantsToSign: false
   }
 
   const dataShape = {
-    inputsData: {},
+    inputsData: inputsData,
     dataBoard: [dataShapeBoard]
   }
 
