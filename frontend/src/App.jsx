@@ -8,8 +8,8 @@ function App() {
   const [select, setSelect] = useState("none")
   
   const dataShapeBoard = {
-    title: "",
-    description: "",
+    performanceTitle: "",
+    performanceDescription: "",
     quantity: "",
     unitPrice: "",
     tva: ""

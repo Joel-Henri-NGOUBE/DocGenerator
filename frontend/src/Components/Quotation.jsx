@@ -1,4 +1,4 @@
-import React from 'react'
+import React , {useState} from 'react'
 import InputLabel from './InputLabel'
 import InputNumber from './InputNumber'
 import InputDate from './InputDate'
@@ -6,6 +6,19 @@ import Board from './Board'
 
 export default function Quotation({ data, setData, dataShapeBoard}) {
   const { company, client, quotation, wantsToSign } = data.inputsData
+  
+  const [visualizeClicked, setVisualizeClicked] = useState(false)
+
+  const download = (company, client, quotation, wantsToSign, modalities) => {
+    const data = {
+      company: company,
+      client: client,
+      quotation: quotation,
+      wantsToSign: wantsToSign,
+      modalities: modalities
+    }
+    fetch(`http://localhost:3250/download?company=${JSON.stringify(company)}&client=${JSON.stringify(client)}&quotation=${JSON.stringify(quotation)}&wantsToSign=${wantsToSign}&modalities=${JSON.stringify(modalities)}`)
+  }
   return (
     <div>
         <h2>Informations de l'entreprise</h2>
@@ -118,13 +131,14 @@ export default function Quotation({ data, setData, dataShapeBoard}) {
         dataShapeBoard={dataShapeBoard}
         setData={setData}/>
         <label htmlFor="sign">Avez-vous besoin d'une signature ?</label>
-        <select id="sign" value={wantsToSign ? "yes" : "no"} onChange={(e) => setData({...data, inputsData: {...data.inputsData, wantsToSign: !data.inputsData.wantsToSign}})}>
+        <select id="sign" value={wantsToSign ? "yes" : "no"} onChange={() => setData({...data, inputsData: {...data.inputsData, wantsToSign: !data.inputsData.wantsToSign}})}>
           <option value="yes">Oui</option>
           <option value="no">Non</option>
         </select>
-        <button type="button">Visualiser</button>
-        <button>Télécharger</button>    
-        {/* {visualizeClicked ? <embed src="http://localhost:3250/getfile" width="800px" height="800px"/> : <></>} */}
+        <button type="button" onClick={() => setVisualizeClicked(!visualizeClicked)}>Visualiser</button>
+        {/* <button onClick={() => download(company, client, quotation, wantsToSign, data.dataBoard)}>Télécharger</button>     */}
+        <a href={`http://localhost:3250/download?company=${JSON.stringify(company)}&client=${JSON.stringify(client)}&quotation=${JSON.stringify(quotation)}&wantsToSign=${wantsToSign}&modalities=${JSON.stringify(data.dataBoard)}`}>Télécharger</a>
+        {visualizeClicked ? <embed src={`http://localhost:3250/getfile?company=${JSON.stringify(company)}&client=${JSON.stringify(client)}&quotation=${JSON.stringify(quotation)}&wantsToSign=${wantsToSign}&modalities=${JSON.stringify(data.dataBoard)}`} width="800px" height="800px"/> : <></>}
         // for
     </div>
   )

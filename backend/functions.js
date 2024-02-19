@@ -92,7 +92,7 @@ function addBottom(document,company){
     // .fontSize(8)
     .font("./Fonts/TT Chocolates Trial Regular.otf")
     .fillColor("#000000")
-    .text(`                              Numéro SIREN: ${company.siren}\n                              ${company.street} \n                              ${company.zipcode} ${company.city}\n                              ${company.country}\nTéléphone: ${company.phone}\nEmail: ${company.mail}\nSite Web: ${company.site}`, 51, document.page.height - 30 - height2, {
+    .text(`                              Numéro SIREN: ${company.siren}\n                              ${company.street} \n                              ${company.zipcode} ${company.city}\n                              ${company.country}\nTéléphone: ${company.phone}\nEmail: ${company.mail}\nSite Web: ${company.site}`, 51, document.page.height - 30 - stringHeight2, {
         columns: 2,
         columnGap: 10,
         height: stringHeight2,
@@ -114,11 +114,11 @@ function addBoard(document, modalities){
     .lineTo(560, 400)
     .lineWidth(2)
     .fillAndStroke("#11EBCD", "#11EBCD")
-
+    console.log(modalities)
     const rows = modalities.map((element) => {
-        let priceHT = element.quantity * element.unitPrice
-        let priceTTC = priceHT * (1 + element.tva)
-        return [`${element.performaneTitle}\n${element.performaneDescription}`, element.quantity, element.unitPrice, element.tva, priceHT, priceTTC]
+        let priceHT = parseInt(element.quantity) * parseFloat(element.unitPrice)
+        let priceTTC = priceHT * (1 + parseInt(element.tva))
+        return [`${element.performanceTitle}\n${element.performanceDescription}`, element.quantity, element.unitPrice, element.tva, priceHT, priceTTC]
     })
 
     let totalHT = 0 
@@ -178,7 +178,7 @@ function addBoard(document, modalities){
     .text(`Total TTC\n${totalTTC} €`, document.page.width - 200, document.y, {
         columns: 2,
         columnGap: 10,
-        height: heightLevel4,
+        height: stringHeight,
         width: 200,
         align: "left",
     })
@@ -187,7 +187,7 @@ function addBoard(document, modalities){
 
 
 function createQuotation(document, company, client, modalities, quotation, wantsToSign, number){
-
+    console.log(quotation)
     // doc.fontSize(25).text('Here is some vector graphics...', 100, 80);
     // document.
     document
@@ -269,7 +269,7 @@ function createQuotation(document, company, client, modalities, quotation, wants
         signing(document)
     }
 
-    addBottom(document)
+    addBottom(document, company)
     // document.addPage()
     // addBottomLine()
 
