@@ -3,6 +3,8 @@ import './App.css';
 import { useState } from 'react';
 import CV from './Components/CV';
 import Quotation from './Components/Quotation';
+import Login from './Components/Login';
+import SignUp from './Components/SignUp';
 // Quotation
 function App() {
   const [select, setSelect] = useState("none")
@@ -48,9 +50,26 @@ function App() {
   }
 
   const [data, setData] = useState(dataShape)
+  
+  const fields = {username: "", password: ""}
+
+  const [login, setLogin] = useState(fields)
+  
+  const [redirect, setRedirect] = useState(false)
+
+  const [signup, setSignup] = useState(fields)
+  
+  const [loggedIn, setLoggedIn] = useState(false)
+  
+  const [messages, setMessages] = useState(false)
 
   return (
     <div className="App">
+      {messages}
+      {
+      !loggedIn 
+      ? (!redirect ? <Login login={login} setLogin={setLogin} setRedirect={setRedirect} setLoggedIn={setLoggedIn} setMessages={setMessages}/> 
+      : <SignUp signup={signup} setSignup={setSignup} setRedirect={setRedirect} setMessages={setMessages}/>) : <>
       <select id="file" value={select} onChange={(e) => setSelect(e.target.value)}>
         <option value="none">...</option>
         <option value="quotation">Devis</option>
@@ -64,6 +83,7 @@ function App() {
       setData={setData} 
       /> 
       : (select === "cv" && <CV />)}
+      </>}
     </div>
   );
 }

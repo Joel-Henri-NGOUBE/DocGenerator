@@ -4,38 +4,11 @@ const cors = require("cors")
 
 const { treatPdfData } = require("./PdfFunctions/treatPdfData")
 
-const mysql = require("mysql")
+const {addUser} = require("./DatabaseFunctions/addUser")
+const { connection } = require("./DatabaseFunctions/connection")
+const { logUser } = require("./DatabaseFunctions/logUser")
 
-const connect = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "pdfgenerator",
-  port: 3306
-})
-
-connect.connect((err) => {
-  if(err){
-    console.log(err)
-    return
-  }
-  console.log("Connexion à la base de données réussie")
-})
-
-connect.query("SELECT * FROM users", (error, rows, fields) => {
-    if(error){
-      console.log(error)
-      return
-    }
-    console.log(rows.map((element) => `${element.username} a l'ID ${element.id} et son mot de passe est ${element.password}`))
-})
-// const { addSample } = require("./functions")
-
-// const fs = require("fs")
-
-// const PDFDocument = require('pdfkit');
-
-// const blobStream  = require('blob-stream');
+// addUser("bonjour", "bonsoir")
 
 const app = express()
 
@@ -43,6 +16,29 @@ const port = 3250
 
 app.use(express.json())
 app.use(cors())
+
+// const mysql = require("mysql")
+
+
+
+//     const connect = mysql.createConnection({
+//     host: "localhost",
+//     user: "root",
+//     password: "",
+//     database: "pdfgenerator",
+//     port: 3306
+//     })
+
+//     connect.connect((err) => {
+//     if(err){
+//         console.log(err)
+//         return
+//     }
+//     console.log("Connexion à la base de données réussie")
+//     })
+//     connect.query("INSERT INTO users (username, password) VALUES ('${username}', '${password}')", (err, rows, fields) => {
+//       console.log(rows.insertId)
+//     })
 
 // Données à avoir
 /*
@@ -139,6 +135,51 @@ app.get("/getfile", (req,res) => {
   // // console.log(req.body.wantsToSign)
   // // console.log(req.query.company)
   // // console.log(req.query.wantsToSign)
+})
+
+app.post("/login", (req, res) => {
+  const {username, password} = req.body
+  logUser(username, password, res)
+  // connection("SELECT * FROM users WHERE username = :username",(err, rows, fields) => {
+    // vérifier le hash du mot de passe
+    // if(result) res.json({"loggedIn": false, message: "Aucun identifiant correspondant"})
+    // if(hash){
+    //   res.json({"loggedIn": true})
+    // }
+    // else{
+    //   res.json({"loggedIn": false, message: "Mot de passe erroné"})
+    // }
+// })
+  
+})
+
+// Inscription terminée
+app.post("/signup", (req, res) => {
+  const {username, password} = req.body 
+  console.log(req.body)
+  addUser(username, password, res)
+})
+
+// getPDF
+app.get("/getallfiles", (req, res) => {
+
+})
+
+// addUser
+app.post("/adduser", (req, res) => {
+  
+})
+
+// deletePDF
+app.delete("/deletfile", (req, res) => {
+  
+})
+
+
+
+// addPDF
+app.post("/addfile", (req, res) => {
+  
 })
 
 

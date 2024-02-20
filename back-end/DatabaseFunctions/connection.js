@@ -1,6 +1,6 @@
 const mysql = require("mysql")
 
-function connection(query, callback){
+function connection(query, callback, continuing, params = undefined){
 
     const connect = mysql.createConnection({
     host: "localhost",
@@ -25,7 +25,18 @@ function connection(query, callback){
     //     }
     //     console.log(rows.map((element) => `${element.username} a l'ID ${element.id} et son mot de passe est ${element.password}`))
     // })
-    connect.query(query, callback)
+    if(params){
+        console.log(params)
+        connect.query(query, params, callback)
+    }
+    else{
+        connect.query(query, callback)
+    }
+    if(continuing){
+        return connect
+    }
 }
+
+
 
 module.exports = { connection }
