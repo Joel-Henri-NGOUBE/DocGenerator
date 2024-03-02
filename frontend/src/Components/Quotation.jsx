@@ -9,16 +9,28 @@ export default function Quotation({ data, setData, dataShapeBoard}) {
   
   const [visualizeClicked, setVisualizeClicked] = useState(false)
 
-  const download = (company, client, quotation, wantsToSign, modalities) => {
-    const data = {
-      company: company,
-      client: client,
-      quotation: quotation,
-      wantsToSign: wantsToSign,
-      modalities: modalities
-    }
-    fetch(`http://localhost:3250/download?company=${JSON.stringify(company)}&client=${JSON.stringify(client)}&quotation=${JSON.stringify(quotation)}&wantsToSign=${wantsToSign}&modalities=${JSON.stringify(modalities)}`)
-  }
+  // function fetchData(){
+  //   fetch("http://localhost:3250/getfile",{
+  //         method: "POST",
+  //         headers: {
+  //             "Content-Type" : "application/json"
+  //         },
+          
+  //         body: JSON.stringify()
+  //     })
+  // }
+
+  // const download = (company, client, quotation, wantsToSign, modalities) => {
+  //   const data = {
+  //     company: company,
+  //     client: client,
+  //     quotation: quotation,
+  //     wantsToSign: wantsToSign,
+  //     modalities: modalities
+  //   }
+
+  //   fetch(`http://localhost:3250/download?company=${JSON.stringify(company)}&client=${JSON.stringify(client)}&quotation=${JSON.stringify(quotation)}&wantsToSign=${wantsToSign}&modalities=${JSON.stringify(modalities)}`)
+  // }
   return (
     <div>
         <h2>Informations de l'entreprise</h2>
@@ -136,6 +148,7 @@ export default function Quotation({ data, setData, dataShapeBoard}) {
           <option value="no">Non</option>
         </select>
         <button type="button" onClick={() => setVisualizeClicked(!visualizeClicked)}>Visualiser</button>
+        {/* <button type="button" onClick={() => fetchData()}>Visualiser</button> */}
         {/* <button onClick={() => download(company, client, quotation, wantsToSign, data.dataBoard)}>Télécharger</button>     */}
         <a href={`http://localhost:3250/download?company=${JSON.stringify(company)}&client=${JSON.stringify(client)}&quotation=${JSON.stringify(quotation)}&wantsToSign=${wantsToSign}&modalities=${JSON.stringify(data.dataBoard)}`}>Télécharger</a>
         {visualizeClicked ? <embed src={`http://localhost:3250/getfile?company=${JSON.stringify(company)}&client=${JSON.stringify(client)}&quotation=${JSON.stringify(quotation)}&wantsToSign=${wantsToSign}&modalities=${JSON.stringify(data.dataBoard)}`} width="800px" height="800px"/> : <></>}

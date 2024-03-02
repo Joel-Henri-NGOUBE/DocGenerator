@@ -15,7 +15,7 @@ const resWrite = (data) => {
 
   const { company, client, quotation, wantsToSign, modalities } = req.query
 //   console.log(object)
-  const newQuotation = {...(JSON.parse(quotation.toString())), reference: "JUG4GRZGFH78EG5R8ZE", date: new Date().toLocaleDateString()} 
+  const newQuotation = {...(JSON.parse(quotation.toString())), reference: Math.floor(Date.now()*Math.random()).toString(16).toUpperCase(), date: new Date().toLocaleDateString()} 
   // console.log(JSON.parse(company.toString()))
   const data = [JSON.parse(company.toString()), JSON.parse(client.toString()), JSON.parse(modalities.toString()), newQuotation, wantsToSign, 1]
 //   return dataconst data = treatData(req.query)

@@ -21,8 +21,9 @@ function addPDF(id, data, modalities){
         quotationValidity, 
         quotationSender, 
         quotationPerformanceDate, 
-        wantsToSign, ) 
-        VALUES ('${data[0]}', '${data[1]}', '${data[2]}', '${data[3]}', '${data[4]}', '${data[5]}', '${data[6]}', '${data[7]}', '${data[8]}', '${data[9]}',  '${data[10]}', '${data[11]}', '${data[12]}', '${data[13]}', '${data[14]}', '${data[15]}', '${data[16]}', '${data[17]}','${data[18]}', '${data[19]}')`)
+        wantsToSign,
+        date) 
+        VALUES ('${data[0]}', '${data[1]}', '${data[2]}', '${data[3]}', '${data[4]}', '${data[5]}', '${data[6]}', '${data[7]}', '${data[8]}', '${data[9]}',  '${data[10]}', '${data[11]}', '${data[12]}', '${data[13]}', '${data[14]}', '${data[15]}', '${data[16]}', '${data[17]}','${data[18]}', '${data[19]}', CURRENT_TIMESTAMP)`)
 
         newConnect.query("SELECT LAST_INSERTED_ID()", (err, rows, fields) => {            
             const modString = modalities.map((element) => `('${rows[0].id}', '${element.performanceTitle}', '${element.performanceDescription}', '${element.quantity}', '${element.unitPrice}', '${element.tva}')`).join(", ")

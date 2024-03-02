@@ -2,3 +2,4 @@
 *.pdf
 index.html
 *test.js
+.env
