@@ -1,8 +1,8 @@
-const {signing} = require('./signing');
+const {signing} = require('../Options/signing');
 
-const {addBottom} = require('./addBottom');
+const {addBottom} = require('../Utils/addBottom');
 
-const {addBoard} = require('./addBoard');
+const {addBoard} = require('../Utils/addBoard');
 
 function createQuotation(document, company, client, modalities, quotation, wantsToSign, number){
     console.log(quotation)

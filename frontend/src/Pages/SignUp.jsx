@@ -1,7 +1,13 @@
-import React from 'react'
-import InputLabel from './InputLabel'
+import React, { useEffect } from 'react'
+import InputLabel from '../Components/Inputs/InputLabel'
+import { onAccessRight } from '../authMonitor/onAccessRight'
 
-export default function SignUp({signup, setSignup, setRedirect, setMessages}) {
+export default function SignUp({signup, token, setSignup, setMessages}) {
+    
+    useEffect(() => {              
+        onAccessRight("http://localhost:3250/access", token, () => {window.location.href = "/"}, "http://localhost:3000/signup")
+    }, [])
+
     function signUp(e,signup){
         e.preventDefault()
         console.log(signup)
@@ -31,7 +37,8 @@ export default function SignUp({signup, setSignup, setRedirect, setMessages}) {
         onChange={(e) => setSignup({...signup, password: e.target.value})}
         />
         <button onClick={(e) => signUp(e,signup)}>S'inscrire</button>
-        <button onClick={() => setRedirect(r => !r)}>Connectez-vous</button>
+        <button onClick={() => window.location.href = "/login"} type="button">Connectez-vous</button>
+        {/* <button onClick={() => setRedirect(r => !r)}>Connectez-vous</button> */}
 
         </form>
     </div>

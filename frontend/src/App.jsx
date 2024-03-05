@@ -1,10 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
 import { useState } from 'react';
-import CV from './Components/CV';
-import Quotation from './Components/Quotation';
-import Login from './Components/Login';
-import SignUp from './Components/SignUp';
+import CV from './Components/Choices/CV';
+import Quotation from './Components/Choices/Quotation';
+import Login from './Pages/Login';
+import SignUp from './Pages/SignUp';
+import { Route, Routes } from 'react-router-dom';
+import Doc from './Pages/Doc';
+import History from './Pages/History';
 // Quotation
 function App() {
   const [select, setSelect] = useState("none")
@@ -63,9 +66,11 @@ function App() {
   
   const [messages, setMessages] = useState(false)
 
+  const [token, setToken] = useState("")
+
   return (
     <div className="App">
-      {messages}
+      {/* {messages}
       {
       !loggedIn 
       ? (!redirect ? <Login login={login} setLogin={setLogin} setRedirect={setRedirect} setLoggedIn={setLoggedIn} setMessages={setMessages}/> 
@@ -83,9 +88,50 @@ function App() {
       setData={setData} 
       /> 
       : (select === "cv" && <CV />)}
-      </>}
+      </>} */}
+    <Routes>
+
+        <Route 
+          path="/signup" 
+          element={
+          <SignUp 
+            token={token}
+            signup={signup}
+            setSignup={setSignup}
+            setMessages={setMessages}
+          />}
+        />
+
+        <Route 
+          path="/login" 
+          element={
+          <Login 
+            token={token} 
+            setToken={setToken}
+            login={login}
+            setLogin={setLogin}
+            setMessages={setMessages}
+          />}
+        />
+
+        <Route 
+          path="/" 
+          element={
+          <Doc 
+            token={token}
+            setToken={setToken}
+          />}
+        />
+        
+        <Route path="/history" element={<History token={token} />}/>
+        <Route>
+        </Route>
+        <Route />
+    </Routes>
+      
     </div>
   );
 }
+
 
 export default App;

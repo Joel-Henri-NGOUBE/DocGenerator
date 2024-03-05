@@ -1,4 +1,4 @@
-const connection = require("../connections")
+const connection = require("../Connection/connection")
 
 function addPDF(id, data, modalities){
     let newConnect = connection(`INSERT INTO data (

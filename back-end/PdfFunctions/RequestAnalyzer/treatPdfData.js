@@ -1,4 +1,4 @@
-const { createPDF } = require("./createPDF")
+const { createPDF } = require("../Generator/createPDF")
 
 function treatPdfData(visualize, req, res){
 const resWrite = (data) => {

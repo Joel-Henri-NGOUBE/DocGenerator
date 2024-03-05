@@ -1,8 +1,8 @@
 import React , {useState} from 'react'
-import InputLabel from './InputLabel'
-import InputNumber from './InputNumber'
-import InputDate from './InputDate'
-import Board from './Board'
+import InputLabel from '../Inputs/InputLabel'
+import InputNumber from '../Inputs/InputNumber'
+import InputDate from '../Inputs/InputDate'
+import Board from '../Board'
 
 export default function Quotation({ data, setData, dataShapeBoard}) {
   const { company, client, quotation, wantsToSign } = data.inputsData

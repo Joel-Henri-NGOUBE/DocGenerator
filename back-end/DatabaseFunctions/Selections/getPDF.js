@@ -1,4 +1,4 @@
-const {connection} = require("./connection")
+const {connection} = require("../Connection/connection")
 
 function getPDF(id, res){
     let newConnect = connection(`SELECT * FROM data_devis WHERE id = :id`, (err, rows, fields) => {

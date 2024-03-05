@@ -1,21 +1,16 @@
 const express = require("express")
 
-const jwt = require("jsonwebtoken")
-
 const cors = require("cors")
 
-const { treatPdfData } = require("./PdfFunctions/treatPdfData")
+const { treatPdfData } = require("./PdfFunctions/RequestAnalyzer/treatPdfData")
 
-const { addUser } = require("./DatabaseFunctions/addUser")
+const { addUser } = require("./DatabaseFunctions/Insertions/addUser")
 
-// const { addUser } = require("./DatabaseFunctions/addUser")
+const { logUser } = require("./DatabaseFunctions/Selections/logUser")
 
-// const { connection } = require("./DatabaseFunctions/connection")
+const { accessGiver } = require("./Middlewares/Access/accessGiver")
 
-const { logUser } = require("./DatabaseFunctions/logUser")
-
-const { accessGiver } = require("./Middlewares/accessGiver")
-
+const { contentExaminator } = require("./Middlewares/Content/contentExaminator")
 
 const app = express()
 
@@ -23,56 +18,7 @@ const port = 3250
 
 app.use(express.urlencoded({"extended" : true}))
 app.use(express.json())
-app.use(cors())
-
-// app.use(cookies())
-
-// Données à avoir
-/*
-  company 
-      company.name
-      company.siren
-      company.street
-      company.zipcode
-      company.city
-      company.country
-      company.phone
-      company.mail
-      company.site
-  
-  modalities
-      performaneTitle
-      performaneDescription
-      quantity
-      unitPrice
-      tva
-
-  client
-      client.name
-      client.street
-      client.zipcode
-      client.city
-      client.phone
-
-  quotation
-      // quotation.date
-      // quotation.reference
-      quotation.validity
-      quotation.sender
-      quotation.performanceDate
-
-*/
-
-const contentExaminator = (req, res, next) => {
-  req.body.company
-  req.body.wantsToSign
-  // En principe les requêtes arrivent au format JSON
-  // Si méthode vaut GET analyser req.query
-  // Si méthode vaut POST analyser req.body
-
-}
-
-
+app.use(cors("http://localhost:3000"))
 
 app.post("/login", (req, res) => {
 
@@ -95,9 +41,8 @@ app.post("/signup", (req, res) => {
   
 })
 
-// app.use(accessGiver)
+// app.use(contentExaminator)
 
-// En post
 app.get("/download", (req, res) => {
   
     treatPdfData(false, req, res)
@@ -110,35 +55,29 @@ app.get("/getfile", (req,res) => {
 
 })
 
-app.use((req, res, next) => {
-  // const { token } = req.
+app.use(accessGiver)
+
+app.get("/access", (req, res) => {
+  console.log("J'ai passé le middleware", req.token)
+  return res.json({access: "given", token: req.token, message: "User authentified"})
+
 })
-// app.use((req, res, next) => {
-//   console.log("HEY", req.session)
-//   next()
-// })
 
 // getPDF
 app.get("/getallfiles", (req, res) => {
 
 })
 
-// addUser
-// app.post("/adduser", (req, res) => {
-  
-// })
-
 // deletePDF
 app.delete("/deletefile", (req, res) => {
   
 })
 
+// addPDF on createPDF
 
-
-// addPDF
-app.post("/addfile", (req, res) => {
+// app.post("/addfile", (req, res) => {
   
-})
+// })
 
 
 

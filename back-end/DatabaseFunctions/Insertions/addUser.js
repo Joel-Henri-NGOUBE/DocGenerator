@@ -1,4 +1,4 @@
-const {connection} = require("./connection")
+const {connection} = require("../Connection/connection")
 
 const bcrypt = require("bcryptjs")
 

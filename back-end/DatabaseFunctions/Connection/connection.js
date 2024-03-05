@@ -26,7 +26,7 @@ function connection(query, callback, continuing, params = undefined){
     //     console.log(rows.map((element) => `${element.username} a l'ID ${element.id} et son mot de passe est ${element.password}`))
     // })
     if(params){
-        console.log(params)
+        // console.log(params)
         connect.query(query, params, callback)
     }
     else{

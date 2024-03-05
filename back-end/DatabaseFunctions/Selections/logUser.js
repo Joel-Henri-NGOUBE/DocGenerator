@@ -1,5 +1,7 @@
 const bcrypt = require("bcryptjs")
-const {connection} = require("./connection")
+
+const {connection} = require("../Connection/connection")
+
 const jwt = require("jsonwebtoken")
 
 
@@ -23,7 +25,7 @@ function logUser(username, password, res, req){
             })
 
             // console.log(token)
-            res.json({loggedIn: true, token: token})
+            res.json({loggedIn: true, token: token, message: "User successfully logged"})
           // return 
         }
         else{

@@ -2,9 +2,9 @@ const PDFDocument = require('pdfkit-table');
 
 // const table = require('pdfkit-table');
 
-const {addSample} = require('./addSample');
+const {addSample} = require('../Utils/Sample/addSample');
 
-const {createQuotation} = require('./createQuotation');
+const {createQuotation} = require('../Choices/createQuotation');
 
 
 function createPDF(visualize, response, onData, onEnd, whichFunction, addHeaders, data){
