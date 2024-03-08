@@ -95,7 +95,7 @@ function App() {
           path="/signup" 
           element={
           <SignUp 
-            token={token}
+            // token={token}
             signup={signup}
             setSignup={setSignup}
             setMessages={setMessages}
@@ -106,8 +106,8 @@ function App() {
           path="/login" 
           element={
           <Login 
-            token={token} 
-            setToken={setToken}
+            // token={token} 
+            // setToken={setToken}
             login={login}
             setLogin={setLogin}
             setMessages={setMessages}
@@ -117,16 +117,17 @@ function App() {
         <Route 
           path="/" 
           element={
-          <Doc 
-            token={token}
-            setToken={setToken}
+          <Doc
           />}
         />
         
-        <Route path="/history" element={<History token={token} />}/>
-        <Route>
-        </Route>
-        <Route />
+        <Route 
+          path="/history" 
+          element={
+          <History 
+          />}
+        />
+
     </Routes>
       
     </div>

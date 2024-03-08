@@ -11,6 +11,7 @@ const { logUser } = require("./DatabaseFunctions/Selections/logUser")
 const { accessGiver } = require("./Middlewares/Access/accessGiver")
 
 const { contentExaminator } = require("./Middlewares/Content/contentExaminator")
+const { logUserOut } = require("./DatabaseFunctions/Updations/logUserOut")
 
 const app = express()
 
@@ -54,15 +55,21 @@ app.get("/getfile", (req,res) => {
     treatPdfData(true, req, res)
 
 })
-
 app.use(accessGiver)
 
 app.get("/access", (req, res) => {
-  console.log("J'ai passé le middleware", req.token)
+
   return res.json({access: "given", token: req.token, message: "User authentified"})
 
 })
 
+app.get("/logout", (req, res) => {
+
+    logUserOut(req.payload.id)
+
+    return res.json({message: "User disconnected"})
+  
+})
 // getPDF
 app.get("/getallfiles", (req, res) => {
 

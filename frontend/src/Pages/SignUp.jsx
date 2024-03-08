@@ -1,12 +1,15 @@
 import React, { useEffect } from 'react'
 import InputLabel from '../Components/Inputs/InputLabel'
 import { onAccessRight } from '../authMonitor/onAccessRight'
+import { useAccessChecker } from '../authMonitor/hooks/useAccessChecker'
 
-export default function SignUp({signup, token, setSignup, setMessages}) {
+export default function SignUp({signup, setSignup, setMessages}) {
     
-    useEffect(() => {              
-        onAccessRight("http://localhost:3250/access", token, () => {window.location.href = "/"}, "http://localhost:3000/signup")
-    }, [])
+    const [token, isSecondMount] = useAccessChecker(() => {window.location.href = "/"}, "http://localhost:3000/signup")
+
+    // useEffect(() => {              
+    //     onAccessRight("http://localhost:3250/access", token, () => {window.location.href = "/"}, "http://localhost:3000/signup")
+    // }, [])
 
     function signUp(e,signup){
         e.preventDefault()
@@ -23,6 +26,7 @@ export default function SignUp({signup, token, setSignup, setMessages}) {
     }
     return (
     <div>
+        {isSecondMount}
         <form>
         <InputLabel
         id="username"

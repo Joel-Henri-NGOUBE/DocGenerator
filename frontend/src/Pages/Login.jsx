@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
 import InputLabel from '../Components/Inputs/InputLabel'
-import { onAccessRight } from '../authMonitor/onAccessRight'
+// import { onAccessRight } from '../authMonitor/onAccessRight'
+import { useAccessChecker } from '../authMonitor/hooks/useAccessChecker'
 
-export default function Login({login, token, setToken, setLogin, setMessages}) {
+export default function Login({login, setLogin, setMessages}) {
     
 // Refaire à chaque fois la requête de connexion pour que ça passe par le middleware de vérification de token
 // Supprimer le token au clic de déconnexion pour que le middleware fasse un set de loggedIn à false
@@ -11,6 +12,7 @@ export default function Login({login, token, setToken, setLogin, setMessages}) {
     //     onAccessRight("http://localhost:3250/access", token, () => {window.location.href = "/"})
     // }, [])
 
+    const [token, isSecondMount] = useAccessChecker(() => {window.location.href = "/"})
 
     // function logIn(e,login){
     //     e.preventDefault()
@@ -42,6 +44,7 @@ export default function Login({login, token, setToken, setLogin, setMessages}) {
 
     return (
     <div>
+        {isSecondMount}
         <form>
         <InputLabel
         id="username"
